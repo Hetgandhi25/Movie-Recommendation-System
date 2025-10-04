@@ -1,2 +1,64 @@
 # Movie-Recommendation-System
-Designed and developed a ML based content-based movie recommendation system using BoW and cosine similarity on movie metadata.
+
+A content-based movie recommendation system built in Python. This project takes a movie title as input and suggests a list of the top 5 most similar movies based on their content metadata.
+
+## Dataset
+
+This project utilizes the **TMDB 5000 Movie Dataset**. The dataset is composed of two primary files:
+* `tmdb_5000_movies.csv`
+* `tmdb_5000_credits.csv`
+
+## How It Works
+
+The recommendation engine follows a content-based filtering methodology, which involves these steps:
+
+1.  **Data Loading and Preparation**:
+    * The two CSV files are loaded into Pandas DataFrames.
+    * The DataFrames are merged into a single DataFrame on the 'title' column.
+    * Key columns for analysis are selected, including `movie_id`, `title`, `overview`, `genres`, `keywords`, `cast`, and `crew`.
+
+2.  **Feature Extraction and Preprocessing**:
+    * Helper functions parse the JSON-like string data in the `genres`, `keywords`, `cast`, and `crew` columns using Python's `ast` module.
+    * Specific information is extracted, such as:
+        * The names of all associated genres.
+        * The names of all associated keywords.
+        * The names of the top 3 cast members.
+        * The name of the director from the `crew` list.
+    * All extracted names (like "Science Fiction") have spaces removed to be treated as single entities (e.g., "ScienceFiction").
+
+3.  **Feature Engineering**:
+    * A consolidated `tags` column is created for each movie.
+    * This column is a combination of the movie's processed `overview`, `genres`, `keywords`, `cast`, and `crew`.
+
+4.  **Text Vectorization**:
+    * The text in the `tags` column is converted to lowercase.
+    * The `movie_recommendation_system.py` script uses the NLTK library's `PorterStemmer` to perform stemming on the text.
+    * Scikit-learn's `CountVectorizer` is used to transform the text into a high-dimensional vector space based on the Bag-of-Words (BoW) model.
+    * The vectorizer is configured to use a maximum of 5000 features (`max_features=5000`) and to remove English stop words (`stop_words='english'`).
+
+5.  **Similarity Calculation**:
+    * The cosine similarity is calculated between all movie vectors using `sklearn.metrics.pairwise.cosine_similarity`. This creates a similarity matrix.
+
+6.  **Recommendation**:
+    * A `recommend` function takes a movie title as input.
+    * It finds the movie's index and uses the similarity matrix to find the 5 movies with the highest similarity scores.
+
+7.  **Exporting**:
+    * The final processed DataFrame and the similarity matrix are serialized and saved into `.pkl` files using Pickle for future use.
+
+## Technologies Used
+
+* **Python**
+* **Pandas**
+* **NumPy**
+* **Scikit-learn**
+* **NLTK** (used for stemming in `movie_recommendation_system.py`)
+* **Pickle**
+
+## How to Run
+
+1.  Clone the repository.
+2.  Install the required libraries: `pandas`, `numpy`, `scikit-learn`, `nltk`.
+3.  Download the TMDB 5000 Movie Dataset and place the CSV files in the project directory.
+4.  Run either `movie_recommendation_system.py` or `notebook86c26b4f17.ipynb` to generate the model files.
+5.  The script will output serialized files (`movies.pkl` and `similarity.pkl`) that can be used to make recommendations.
