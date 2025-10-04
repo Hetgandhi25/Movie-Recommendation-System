@@ -2,8 +2,6 @@
 
 A content-based movie recommendation system built in Python. This project takes a movie title as input and suggests a list of the top 5 most similar movies based on their content metadata.
 
-**Learning Source**: This project was developed following the "Movie Recommender System Project | Content Based Recommender System with Heroku Deployment" video by CampusX on YouTube.
-
 ## Project Summary
 
 * This project is a **content-based movie recommendation system** that suggests movies based on their content similarity.
